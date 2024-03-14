@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery</title>
+    <script src="jquery-3.7.0.js">
+    </script>
+  <style>
+    body {
+            font-family: Arial, sans-serif;
+            background-color: #131862; 
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-container {
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .container {
+            background-color: #1e2a78; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px; 
+        }
+
+        #result {
+            width: 80%; 
+            background-color: #0c0f27;
+            color: white; 
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            animation: slideIn 0.5s ease-out;
+            display: block; 
+            margin: 0 auto; 
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        button {
+            background-color: #0a0f5c; 
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #252f9d;
+        }
+
+        input[type="checkbox"], input[type="number"] {
+            margin: 5px;
+        }
+
+        input[type="number"] {
+            width: 50px;
+        }
+
+        label {
+            display: block;
+            margin: 5px 0;
+        }
+  </style>
+    <script>
+        $(document).ready(function() {
+            $('#generate').click(function() {
+                var length = $('#length').val();
+                var numbers = $('#numbers').is(':checked');
+                var upperCase = $('#upperCase').is(':checked');
+                var lowerCase = $('#lowerCase').is(':checked');
+        
+                var characters = '';
+                if (numbers) characters += '0123456789';
+                if (upperCase) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                if (lowerCase) characters += 'abcdefghijklmnopqrstuvwxyz';
+        
+                var result = '';
+                var charactersLength = characters.length;
+        
+                if(charactersLength === 0) {
+                    $('#result').val('Выберите хотя бы один тип символов.');
+                    return;
+                }
+                
+                for (var i = 0; i < length; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+                
+                $('#result').val(result);
+            });
+        });
+        </script>
+        
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="container">
+            <label for="length">Длина строки:</label>
+            <input type="number" id="length" min="1" max="100" value="10">
+            
+            <label><input type="checkbox" id="numbers" checked> Цифры</label>
+            <label><input type="checkbox" id="upperCase"> Латинские буквы в верхнем регистре</label>
+            <label><input type="checkbox" id="lowerCase"> Латинские буквы в нижнем регистре</label>
+            
+            <button id="generate">Generate</button>
+        </div>
+        <textarea id="result" rows="3"></textarea>
+    </div>
+
+</body>
+
+</html>

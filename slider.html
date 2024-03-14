@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery</title>
+    <script src="jquery-3.7.0.js">
+    </script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #left-pane {
+            background: #210053;
+            width: 25%;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: width 0.3s ease-in-out;
+        }
+
+        #toggle-button {
+            position: absolute;
+            top: 50%;
+            right: -25px;
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+            background: #000;
+            color: #4c1bff;
+            text-align: center;
+            line-height: 25px;
+        }
+
+        #right-pane {
+            background: #0b003b;
+            margin-left: 25%;
+            height: 100%;
+            overflow: auto;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        #top-pane {
+            background: #6050c8;
+            height: calc(50% - 10px);
+        }
+
+        #bottom-pane {
+            background: #1013b5;
+            height: calc(50% - 10px);
+        }
+
+        #resize-handle {
+            height: 20px;
+            background: #0d057c;
+            cursor: ns-resize;
+            user-select: none;
+        }
+
+        #left-pane-resize-handle {
+            height: 20px;
+            background: #6655ba;
+            cursor: ns-resize;
+            user-select: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            var leftPaneVisible = true;
+            var handleHeight = $('#resize-handle').outerHeight();
+
+            $('#toggle-button').click(function () {
+                if (leftPaneVisible) {
+                    $('#left-pane').animate({ width: '0' }, 300);
+                    $('#right-pane').animate({ marginLeft: '0' }, 300);
+                    $(this).html('🡺');
+                } else {
+                    $('#left-pane').animate({ width: '25%' }, 300);
+                    $('#right-pane').animate({ marginLeft: '25%' }, 300);
+                    $(this).html('🡸');
+                }
+                leftPaneVisible = !leftPaneVisible;
+            });
+
+            $('#resize-handle').mousedown(function (e) {
+                e.preventDefault();
+                var startY = e.pageY;
+                var startTopHeight = $('#top-pane').height();
+
+                $(document).mousemove(function (e) {
+                    var moveY = e.pageY - startY;
+                    var newTopHeight = startTopHeight + moveY;
+                    var newBottomHeight = $(window).height() - newTopHeight - handleHeight;
+
+                    if (newTopHeight >= 0 && newBottomHeight >= 0) {
+                        $('#top-pane').height(newTopHeight);
+                        $('#bottom-pane').height(newBottomHeight);
+                    }
+                }).mouseup(function () {
+                    $(document).off('mousemove');
+                });
+            });
+
+            $('#left-pane-resize-handle').mousedown(function (e) {
+                e.preventDefault();
+                var startY = e.pageY;
+                var startHeight = $('#left-pane').height();
+
+                $(document).mousemove(function (e) {
+                    var moveY = e.pageY - startY;
+                    var newHeight = startHeight + moveY;
+
+                    if (newHeight >= 10 && newHeight <= $(window).height() - handleHeight + 20) {
+                        $('#left-pane').height(newHeight);
+                    }
+                }).mouseup(function () {
+                    $(document).off('mousemove');
+                });
+            });
+        });
+
+    </script>
+
+
+</head>
+
+<body>
+
+    <body>
+        <div id="left-pane">
+            <div id="toggle-button">🡸</div>
+            <div id="left-pane-resize-handle">||</div>
+
+        </div>
+        <div id="right-pane">
+            <div id="top-pane"></div>
+            <div id="resize-handle">||</div>
+            <div id="bottom-pane"></div>
+        </div>
+    </body>
+
+</body>
+
+</html>
